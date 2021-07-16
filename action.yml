@@ -1,0 +1,20 @@
+name: "Cloudflare Delete DNS GitHub Action"
+description: "Delete a zone's DNS records"
+author: robgordon89
+inputs:
+  name:
+    description: "The dns name to delete all record types"
+    required: true
+  token:
+    description: "A valid CF API token with Zones.DNS permissions"
+    required: true
+  zone:
+    description: "CF zone ID"
+    required: true
+  types:
+    description: "A comma-separated list of dns types to delete"
+    default: "A,TXT"
+    required: false
+runs:
+  using: "node12"
+  main: "dist/index.js"
