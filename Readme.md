@@ -18,12 +18,14 @@ All sensitive variables should be [set as encrypted secrets](https://help.github
         name: "sub.domain.com"
 ```
 
-### Purging specific types
+### Delete specific DNS types
 
-To purge only specific types, you can pass an array of **DNS Types**
+To purge only specific types, you can pass an array of [Types](https://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-4)
+
+The default is "A,TXT"
 
 ```yaml
-types: "TXT,A"
+types: "A,TXT"
 ```
 
 ### Testing
@@ -34,6 +36,8 @@ Setup .env file from .env.example `cp .env.example .env`
 yarn install
 yarn test
 ```
+
+Tests don't actually delete records, but does query the api for records but stops just before delete
 
 ### Building
 
