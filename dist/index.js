@@ -9854,7 +9854,7 @@ async function getRecords() {
 
 async function deleteRecord(id) {
   let zone = core.getInput('zone')
-  if (areWeTestingWithJest) {
+  if (areWeTestingWithJest()) {
     console.log("would have deleted the record " + id)
   } else {
     await cf.dnsRecords.del(zone, id)
