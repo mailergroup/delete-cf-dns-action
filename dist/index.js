@@ -9828,48 +9828,48 @@ var __webpack_exports__ = {};
 const _ = __nccwpck_require__(3571)
 const core = __nccwpck_require__(2186);
 const cf = __nccwpck_require__(5277)({
-  token: core.getInput('token')
+    token: core.getInput('token')
 });
 
 function areWeTestingWithJest() {
-  return process.env.JEST_WORKER_ID !== undefined;
+    return process.env.JEST_WORKER_ID !== undefined;
 }
 
 async function getRecords() {
-  let name = core.getInput('name')
-  let zone = core.getInput('zone')
-  let types = core.getInput('types')
+    let name = core.getInput('name')
+    let zone = core.getInput('zone')
+    let types = core.getInput('types')
 
-  const records = []
+    const records = []
 
-  let recordTypes = types.replace(/\s+/g, '').split(',');
+    let recordTypes = types.replace(/\s+/g, '').split(',');
 
-  for (const type of recordTypes) {
-    let resp = await cf.dnsRecords.browse(zone, { type, name })
-    records.push(...resp.result)
-  };
+    for (const type of recordTypes) {
+        let resp = await cf.dnsRecords.browse(zone, { type, name })
+        records.push(...resp.result)
+    };
 
-  return records
+    return records
 }
 
 async function deleteRecord(id) {
-  let zone = core.getInput('zone')
-  if (areWeTestingWithJest()) {
-    console.log("would have deleted the record " + id)
-  } else {
-    await cf.dnsRecords.del(zone, id)
-  }
+    let zone = core.getInput('zone')
+    if (areWeTestingWithJest()) {
+        console.log("would have deleted the record " + id)
+    } else {
+        await cf.dnsRecords.del(zone, id)
+    }
 }
 
 async function run() {
-  getRecords()
-    .catch(e => {
-      console.log('There has been a problem: ' + e.message);
-    }).then(records => {
-      for (const record of records) {
-        deleteRecord(record['id'])
-      };
-    });
+    getRecords()
+        .catch(e => {
+            console.log('There has been a problem: ' + e.message);
+        }).then(records => {
+            for (const record of records) {
+                deleteRecord(record['id'])
+            };
+        });
 }
 
 run();
