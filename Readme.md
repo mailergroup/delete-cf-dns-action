@@ -11,7 +11,7 @@ All sensitive variables should be [set as encrypted secrets](https://help.github
 #### Run using CloudFlare auth token
 ```yaml
     - name: Delete DNS
-      uses: remotecompany/delete-cf-dns-action@v0.0.1
+      uses: mailergroup/delete-cf-dns-action@v0.0.1
       with:
         token: ${{ secrets.CF_TOKEN }}
         zone: ${{ secrets.CF_ZONE }}
