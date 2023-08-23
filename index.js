@@ -51,11 +51,13 @@ async function run() {
             const name = record['name'];
             const id = record['id'];
 
-            if (name.startsWith('a-') && record['type'] === 'TXT') {
+            if (record['type'] === 'TXT') {
                 await deleteRecord(id);
 
-                const aRecordId = id.replace(/^txt/, '');
-                await deleteRecord(aRecordId);
+                if (name.startsWith('a-')) {
+                    const aRecordId = id.replace(/^txt/, '');
+                    await deleteRecord(aRecordId);
+                }
             }
         }
     } catch (e) {
