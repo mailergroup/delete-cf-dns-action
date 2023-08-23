@@ -55,8 +55,7 @@ async function run() {
                 await deleteRecord(id);
 
                 if (name.startsWith('a-')) {
-                    const aRecordId = id.replace(/^txt/, '');
-                    await deleteRecord(aRecordId);
+                    await deleteRecord(id);
                 }
             }
         }
