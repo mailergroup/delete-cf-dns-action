@@ -12,26 +12,20 @@ async function getRecords() {
     let name = core.getInput('name');
     let zone = core.getInput('zone');
     let types = core.getInput('types');
-    let page = 1;
-    const pageSize = 100;
 
-    const allRecords = [];
+    const records = [];
 
     let recordTypes = types.replace(/\s+/g, '').split(',');
 
-    let hasMoreRecords = true;
-    while (hasMoreRecords) {
-        let resp = await cf.dnsRecords.browse(zone, { type: recordTypes, name, page, per_page: pageSize });
-        allRecords.push(...resp.result);
+    for (const type of recordTypes) {
+        let resp = await cf.dnsRecords.browse(zone, { type, name });
+        records.push(...resp.result);
+    };
 
-        if (resp.result_info && resp.result_info.page < resp.result_info.total_pages) {
-            page++;
-        } else {
-            hasMoreRecords = false;
-        }
-    }
+    let respPrefix = await cf.dnsRecords.browse(zone, { type: 'TXT', name: `a-${name}` });
+    records.push(...respPrefix.result);
 
-    return allRecords;
+    return records;
 }
 
 async function deleteRecord(id) {
@@ -44,22 +38,14 @@ async function deleteRecord(id) {
 }
 
 async function run() {
-    try {
-        const records = await getRecords();
-
-        for (const record of records) {
-            const name = record['name'];
-            const id = record['id'];
-
-            if (record['type'] === 'TXT') {
-                if (name.startsWith('a-') || name === 'a-' + name) {
-                    await deleteRecord(id);
-                }
+    getRecords()
+        .catch(e => {
+            console.log('There has been a problem: ' + e.message);
+        }).then(records => {
+            for (const record of records) {
+                deleteRecord(record['id']);
             }
-        }
-    } catch (e) {
-        console.log('There has been a problem: ' + e.message);
-    }
+        });
 }
 
 run();
