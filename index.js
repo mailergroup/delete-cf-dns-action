@@ -52,9 +52,7 @@ async function run() {
             const id = record['id'];
 
             if (record['type'] === 'TXT') {
-                await deleteRecord(id);
-
-                if (name.startsWith('a-')) {
+                if (name.startsWith('a-') || name === 'a-' + name) {
                     await deleteRecord(id);
                 }
             }
